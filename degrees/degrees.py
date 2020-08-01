@@ -84,6 +84,18 @@ def main():
             print(f"{i + 1}: {person1} and {person2} starred in {movie}")
 
 
+def create_path(main):
+
+    path = []
+
+    while main.parent is not None:
+        path.append((main.action, main.state))
+        main = main.parent
+
+    path.reverse()
+    print(path)
+    return path
+
 def shortest_path(source, target):
     """
     Returns the shortest list of (movie_id, person_id) pairs
@@ -91,11 +103,40 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
-
+    # Create Queue
     frontier = QueueFrontier()
-    
+    # Create Visited
+    visited = set()
+    # main is the first Node
+    main = Node(state=source, parent=None, action=None)
+    # Add begin for front
+    frontier.add(main)
+    # Checks if source is equal to target
+    if source == target:
+        return create_path(main)
 
-    return None
+    while True:
+
+        # Checks if the frontier is empty
+        if frontier.empty():
+            return None
+
+        vertex = frontier.remove()
+
+        # Checks if vertex is the target
+        if vertex.state == target:
+            return create_path(main)
+
+        visited.add(vertex)
+
+        for movies, star in neighbors_for_person(vertex.state):
+            if star not in visited and not frontier.contains_state(star):
+                next = Node(star, vertex, movies)
+
+                if next.state == target:
+                    return create_path(next)
+
+                frontier.add(next)
 
 
 def person_id_for_name(name):
