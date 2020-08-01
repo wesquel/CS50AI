@@ -93,7 +93,6 @@ def create_path(main):
         main = main.parent
 
     path.reverse()
-    print(path)
     return path
 
 def shortest_path(source, target):
