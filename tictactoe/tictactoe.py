@@ -67,8 +67,6 @@ def result(board, action):
     else:
         new_board[x][y] = player(board)
 
-    print(new_board)
-
     return new_board
 
 
@@ -80,7 +78,6 @@ def winner(board):
 
     for x1 in range(2):
         player = players[x1]
-        print(x1)
         if (board[0][0] == player and board[0][1] == player and board[0][2] == player) or \
                 (board[1][0] == player and board[1][1] == player and board[1][2] == player) or \
                 (board[2][0] == player and board[2][1] == player and board[2][2] == player) or \
@@ -92,6 +89,7 @@ def winner(board):
             return player
 
     return None
+
 
 def terminal(board):
     """
@@ -108,7 +106,7 @@ def utility(board):
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
     won = winner(board)
-    
+
     if won == X:
         return 1
     elif won == O:
@@ -122,14 +120,61 @@ def minimax(board):
     Returns the optimal action for the current player on the board.
     """
 
-    AI = player(board)
+    player_now = player(board)
 
-    best_move = set()
+    possibilities = actions(board)
+    highest_value = None
+    move = None
 
-    #def teste(board):
+    for possibilities in possibilities:
+        board[possibilities[0]][possibilities[1]] = player_now
+        value = best_move(board, player_now)
+        board[possibilities[0]][possibilities[1]] = EMPTY
+
+        if highest_value is None:
+            highest_value = value
+            move = possibilities
+        elif player_now == X:
+            if value > highest_value:
+                highest_value = value
+                move = possibilities
+        elif player_now == O:
+            if value < highest_value:
+                highest_value = value
+                move = possibilities
+    return move
 
 
-    for x in range(3):
-        for y in range(3):
-            if board[x][y] == None:
-                return (x, y)
+def best_move(board, player_now):
+    won = winner(board)
+
+    if terminal(board):
+        if won == X:
+            return 1
+        elif won == O:
+            return -1
+        else:
+            return 0
+
+    if player_now == X:
+        player_now = O
+    else:
+        player_now = X
+
+    possibilities = actions(board)
+    highest_value = None
+
+    for possibilities in possibilities:
+        board[possibilities[0]][possibilities[1]] = player_now
+        value = best_move(board, player_now)
+        board[possibilities[0]][possibilities[1]] = EMPTY
+        if highest_value is None:
+            highest_value = value
+        elif player_now == X:
+            if value > highest_value:
+                highest_value = value
+        elif player_now == O:
+            if value < highest_value:
+                highest_value = value
+
+    return highest_value
