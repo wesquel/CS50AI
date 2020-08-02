@@ -76,16 +76,29 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
+    players = [X, O]
 
-    print('TO AKI 3')
+    for x1 in range(2):
+        player = players[x1]
+        print(x1)
+        if (board[0][0] == player and board[0][1] == player and board[0][2] == player) or \
+                (board[1][0] == player and board[1][1] == player and board[1][2] == player) or \
+                (board[2][0] == player and board[2][1] == player and board[2][2] == player) or \
+                (board[0][0] == player and board[1][1] == player and board[2][2] == player) or \
+                (board[0][2] == player and board[1][1] == player and board[2][0] == player) or \
+                (board[0][0] == player and board[1][0] == player and board[2][0] == player) or \
+                (board[0][1] == player and board[1][1] == player and board[2][1] == player) or \
+                (board[0][2] == player and board[1][2] == player and board[2][2] == player):
+            return player
 
     return None
-
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
+    if (winner(board) is not None) or (None not in board[0] and None not in board[1] and None not in board[2]):
+        return True
 
     return False
 
@@ -94,8 +107,14 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-
-    return 0
+    won = winner(board)
+    
+    if won == X:
+        return 1
+    elif won == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
