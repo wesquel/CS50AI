@@ -105,27 +105,33 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-        raise NotImplementedError
+
+        return self.known_mines()
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-        raise NotImplementedError
+
+        return 1
 
     def mark_mine(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        raise NotImplementedError
+        print(cell)
+
+        return 1,1
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        raise NotImplementedError
+        print(cell)
+
+        return 1,1
 
 
 class MinesweeperAI():
@@ -182,7 +188,20 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
-        raise NotImplementedError
+        self.moves_made.add(cell)
+        self.safes.add(cell)
+
+        x, y = cell
+
+        shrouded = []
+
+        for x1 in range(3):
+            for y1 in range(3):
+                x2, y2 = x - 1 + x1, y - 1 + y1
+                if (x2 >= 0 and y2 >= 0) and not(x2 == x and y2 == y) and (x2 < 8 and y2 < 8):
+                    shrouded.append((x2, y2))
+
+        return 1
 
     def make_safe_move(self):
         """
@@ -193,7 +212,7 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        raise NotImplementedError
+        return 1,1
 
     def make_random_move(self):
         """
@@ -202,4 +221,4 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        raise NotImplementedError
+        return 1
