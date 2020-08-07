@@ -95,6 +95,9 @@ class Sentence():
         self.cells = set(cells)
         self.count = count
 
+        self.safes = set()
+        self.mines = set()
+
     def __eq__(self, other):
         return self.cells == other.cells and self.count == other.count
 
@@ -105,33 +108,31 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
-
-        return self.known_mines()
+        return self.mines
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
-
-        return 1
+        return self.safes
 
     def mark_mine(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
-        print(cell)
 
-        return 1,1
+        if cell in self.cells:
+            self.mines.add(cell)
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-        print(cell)
 
-        return 1,1
+        if cell in self.cells:
+            self.safes.add(cell)
 
 
 class MinesweeperAI():
@@ -198,8 +199,22 @@ class MinesweeperAI():
         for x1 in range(3):
             for y1 in range(3):
                 x2, y2 = x - 1 + x1, y - 1 + y1
-                if (x2 >= 0 and y2 >= 0) and not(x2 == x and y2 == y) and (x2 < 8 and y2 < 8):
+                if (x2 >= 0 and y2 >= 0) and not (x2 == x and y2 == y) and (x2 < 8 and y2 < 8) and (
+                        (x2, y2) not in self.moves_made):
                     shrouded.append((x2, y2))
+
+        self.knowledge.append(Sentence(shrouded, count))
+
+        if count == 0:
+            for z in shrouded:
+                if z not in self.safes:
+                    self.safes.add(z)
+        elif count == len(shrouded):
+            for z in shrouded:
+                if z not in self.mines:
+                    self.mines.add(z)
+
+        print(self.safes)
 
         return 1
 
@@ -212,7 +227,14 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        return 1,1
+
+        for x1 in self.safes:
+            if x1 not in self.moves_made:
+                x, y = x1[0], x1[1]
+                return x, y
+
+        return self.make_random_move()
+
 
     def make_random_move(self):
         """
@@ -221,4 +243,14 @@ class MinesweeperAI():
             1) have not already been chosen, and
             2) are not known to be mines
         """
-        return 1
+
+        x, y = 0, 0
+        while (x, y) not in self.moves_made:
+            x = random.randrange(0, 7)
+            y = random.randrange(0, 7)
+
+        print(self.moves_made)
+
+        self.moves_made.add((x, y))
+
+        return x, y
