@@ -124,15 +124,18 @@ class Sentence():
 
         if cell in self.cells:
             self.mines.add(cell)
+            self.cells.remove(cell)
+            self.count -= 1
 
     def mark_safe(self, cell):
         """
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
-
         if cell in self.cells:
             self.safes.add(cell)
+            self.cells.remove(cell)
+
 
 
 class MinesweeperAI():
@@ -203,20 +206,43 @@ class MinesweeperAI():
                         (x2, y2) not in self.moves_made):
                     shrouded.append((x2, y2))
 
-        self.knowledge.append(Sentence(shrouded, count))
+        if len(shrouded) > 0:
 
-        if count == 0:
-            for z in shrouded:
-                if z not in self.safes:
-                    self.safes.add(z)
-        elif count == len(shrouded):
-            for z in shrouded:
-                if z not in self.mines:
-                    self.mines.add(z)
+            if count > 0:
+                self.knowledge.append(Sentence(shrouded, count))
 
-        print(self.safes)
+            if count == 0:
+                for z in shrouded:
+                    if z not in self.safes:
+                        self.safes.add(z)
+            elif count == len(shrouded):
+                for z in shrouded:
+                    if z not in self.mines:
+                        print('to aki')
+                        self.mines.add(z)
 
-        return 1
+            for z1 in self.knowledge:
+                print(z1)
+
+                for z2 in self.safes:
+                    z1.mark_safe(z2)
+
+                for z2 in self.mines:
+                    z1.mark_mine(z2)
+
+                if z1.count == 0 and len(z1.cells) > 0:
+                    for z2 in z1.cells:
+                        if z2 not in self.safes:
+                            self.safes.add(z2)
+
+                if z1.count == len(z1.cells):
+                    for cell in z1.cells:
+                        if cell not in self.mines:
+                            print('na minas to aki', cell)
+                            self.mines.add(cell)
+
+            print('safes',self.safes)
+            print('minas',self.mines)
 
     def make_safe_move(self):
         """
@@ -231,10 +257,10 @@ class MinesweeperAI():
         for x1 in self.safes:
             if x1 not in self.moves_made:
                 x, y = x1[0], x1[1]
+                self.moves_made.add((x, y))
                 return x, y
 
         return self.make_random_move()
-
 
     def make_random_move(self):
         """
