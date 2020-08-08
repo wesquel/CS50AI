@@ -219,8 +219,6 @@ class MinesweeperAI:
                         self.mines.add(z)
 
             for z1 in self.knowledge:
-                print(z1)
-
                 for z2 in self.safes:
                     z1.mark_safe(z2)
 
@@ -235,7 +233,6 @@ class MinesweeperAI:
                 if z1.count == len(z1.cells):
                     for cell in z1.cells:
                         if cell not in self.mines:
-                            print('na minas to aki', cell)
                             self.mines.add(cell)
 
     def make_safe_move(self):
@@ -247,7 +244,6 @@ class MinesweeperAI:
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-        print('to aki')
         for x1 in self.safes:
             if x1 not in self.moves_made:
                 x, y = x1[0], x1[1]
