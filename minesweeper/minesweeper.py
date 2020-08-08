@@ -33,6 +33,9 @@ class Minesweeper():
         # At first, player has found no mines
         self.mines_found = set()
 
+    def teste(self):
+        self.mines_found.add((1,1))
+
     def print(self):
         """
         Prints a text-based representation
@@ -137,7 +140,6 @@ class Sentence():
             self.cells.remove(cell)
 
 
-
 class MinesweeperAI():
     """
     Minesweeper game player
@@ -198,6 +200,7 @@ class MinesweeperAI():
         x, y = cell
 
         shrouded = []
+        checked = []
 
         for x1 in range(3):
             for y1 in range(3):
@@ -218,7 +221,6 @@ class MinesweeperAI():
             elif count == len(shrouded):
                 for z in shrouded:
                     if z not in self.mines:
-                        print('to aki')
                         self.mines.add(z)
 
             for z1 in self.knowledge:
@@ -241,9 +243,6 @@ class MinesweeperAI():
                             print('na minas to aki', cell)
                             self.mines.add(cell)
 
-            print('safes',self.safes)
-            print('minas',self.mines)
-
     def make_safe_move(self):
         """
         Returns a safe cell to choose on the Minesweeper board.
@@ -253,7 +252,7 @@ class MinesweeperAI():
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
-
+        print('to aki')
         for x1 in self.safes:
             if x1 not in self.moves_made:
                 x, y = x1[0], x1[1]
@@ -268,15 +267,12 @@ class MinesweeperAI():
         Should choose randomly among cells that:
             1) have not already been chosen, and
             2) are not known to be mines
-        """
+        """                
 
-        x, y = 0, 0
-        while (x, y) not in self.moves_made:
+        while True:
             x = random.randrange(0, 7)
             y = random.randrange(0, 7)
+            if (x, y) not in self.moves_made:
+                self.moves_made.add((x, y))
+                return x, y
 
-        print(self.moves_made)
-
-        self.moves_made.add((x, y))
-
-        return x, y
