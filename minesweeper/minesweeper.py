@@ -1,8 +1,7 @@
-import itertools
 import random
 
 
-class Minesweeper():
+class Minesweeper:
     """
     Minesweeper game representation
     """
@@ -32,9 +31,6 @@ class Minesweeper():
 
         # At first, player has found no mines
         self.mines_found = set()
-
-    def teste(self):
-        self.mines_found.add((1,1))
 
     def print(self):
         """
@@ -87,7 +83,7 @@ class Minesweeper():
         return self.mines_found == self.mines
 
 
-class Sentence():
+class Sentence:
     """
     Logical statement about a Minesweeper game
     A sentence consists of a set of board cells,
@@ -140,7 +136,7 @@ class Sentence():
             self.cells.remove(cell)
 
 
-class MinesweeperAI():
+class MinesweeperAI:
     """
     Minesweeper game player
     """
@@ -200,7 +196,6 @@ class MinesweeperAI():
         x, y = cell
 
         shrouded = []
-        checked = []
 
         for x1 in range(3):
             for y1 in range(3):
@@ -267,7 +262,7 @@ class MinesweeperAI():
         Should choose randomly among cells that:
             1) have not already been chosen, and
             2) are not known to be mines
-        """                
+        """
 
         while True:
             x = random.randrange(0, 7)
@@ -275,4 +270,3 @@ class MinesweeperAI():
             if (x, y) not in self.moves_made:
                 self.moves_made.add((x, y))
                 return x, y
-
