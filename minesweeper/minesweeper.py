@@ -244,6 +244,7 @@ class MinesweeperAI:
         This function may use the knowledge in self.mines, self.safes
         and self.moves_made, but should not modify any of those values.
         """
+        # create movemente safe for IA
         for x1 in self.safes:
             if x1 not in self.moves_made:
                 x, y = x1[0], x1[1]
@@ -253,6 +254,7 @@ class MinesweeperAI:
         return self.make_random_move()
 
     def make_random_move(self):
+        # if you didn't find a safe move
         """
         Returns a move to make on the Minesweeper board.
         Should choose randomly among cells that:
